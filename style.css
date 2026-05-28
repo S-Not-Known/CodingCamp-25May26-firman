@@ -1,0 +1,725 @@
+/* ============================================================
+   Expense & Budget Visualizer — style.css
+   Single CSS file. All theming via CSS custom properties.
+   Responsive: 2-column desktop → 1-column mobile (≤600px)
+   ============================================================ */
+
+/* ─── 1. CSS CUSTOM PROPERTIES (LIGHT THEME) ─── */
+:root {
+  /* Colors */
+  --bg-page:        #f0f2f5;
+  --bg-panel:       #ffffff;
+  --bg-header:      #ffffff;
+  --text-primary:   #1a1a2e;
+  --text-secondary: #555577;
+  --text-hint:      #888899;
+  --accent:         #4f6ef7;
+  --accent-hover:   #3a57d4;
+  --accent-text:    #ffffff;
+  --warning:        #e05252;
+  --warning-bg:     #fff0f0;
+  --success:        #27ae60;
+  --border:         #e0e3ef;
+  --shadow-sm:      0 1px 4px rgba(0,0,0,0.07);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.10);
+
+  /* Category colors */
+  --color-food:      #4f6ef7;
+  --color-transport: #f7a84f;
+  --color-fun:       #4fc97e;
+  --color-warning:   #e05252;
+
+  /* Spacing */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Typography */
+  --font-base: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-size-sm:   0.8125rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.5rem;
+  --font-size-2xl:  2rem;
+
+  /* Transitions */
+  --transition: 0.15s ease;
+}
+
+/* ─── 2. DARK THEME ─── */
+body.dark {
+  --bg-page:        #12121e;
+  --bg-panel:       #1e1e30;
+  --bg-header:      #1a1a2e;
+  --text-primary:   #e8e8f8;
+  --text-secondary: #a0a0c8;
+  --text-hint:      #6868a0;
+  --accent:         #7a9cf7;
+  --accent-hover:   #5a7ef0;
+  --accent-text:    #0d0d1a;
+  --warning:        #f77a7a;
+  --warning-bg:     #2e1a1a;
+  --border:         #2e2e4e;
+  --shadow-sm:      0 1px 4px rgba(0,0,0,0.3);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.45);
+  --color-food:      #7a9cf7;
+  --color-transport: #f7c47a;
+  --color-fun:       #7af7a8;
+}
+
+/* ─── 3. RESET & BASE ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--font-size-base);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+ul, ol { list-style: none; }
+
+a { color: var(--accent); }
+
+img, canvas { display: block; max-width: 100%; }
+
+/* ─── 4. HEADER ─── */
+.app-header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.app-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  letter-spacing: -0.01em;
+}
+
+.app-title__icon { font-size: 1.4rem; }
+
+/* ─── 5. MAIN LAYOUT ─── */
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Two-column grid rows */
+.grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* ─── 6. PANEL (CARD) ─── */
+.panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-lg);
+  transition: background-color var(--transition), border-color var(--transition),
+              box-shadow var(--transition);
+}
+
+.panel:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.panel__heading {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--border);
+}
+
+.panel__subheading {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+.panel__hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-hint);
+  margin-bottom: var(--space-md);
+  line-height: 1.5;
+}
+
+/* ─── 7. FORM ELEMENTS ─── */
+.transaction-form,
+.budget-limits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.625rem var(--space-md);
+  font-size: var(--font-size-base);
+  font-family: var(--font-base);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background-color var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+.form-input::placeholder { color: var(--text-hint); }
+
+/* Custom select arrow */
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+.form-select--compact {
+  padding: 0.375rem 2rem 0.375rem 0.625rem;
+  font-size: var(--font-size-sm);
+}
+
+/* Validation error state */
+.form-input.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--warning);
+  box-shadow: 0 0 0 3px rgba(224, 82, 82, 0.12);
+}
+
+.error-msg {
+  font-size: var(--font-size-sm);
+  color: var(--warning);
+  min-height: 1.1em;
+  display: block;
+}
+
+/* ─── 8. BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.625rem var(--space-lg);
+  font-size: var(--font-size-base);
+  font-family: var(--font-base);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition),
+              box-shadow var(--transition), color var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+/* Primary button */
+.btn--primary {
+  background-color: var(--accent);
+  color: var(--accent-text);
+  box-shadow: 0 2px 8px rgba(79, 110, 247, 0.25);
+}
+
+.btn--primary:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 12px rgba(79, 110, 247, 0.35);
+}
+
+/* Full-width button */
+.btn--full {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+/* Icon button (theme toggle) */
+.btn--icon {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.625rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.btn--icon:hover {
+  background-color: var(--bg-page);
+  border-color: var(--accent);
+}
+
+/* Danger / delete button */
+.btn--danger {
+  background-color: transparent;
+  color: var(--warning);
+  border: 1.5px solid transparent;
+  padding: 0.25rem 0.5rem;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--danger:hover {
+  background-color: var(--warning-bg);
+  border-color: var(--warning);
+}
+
+/* ─── 9. TRANSACTION LIST ─── */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.list-header .panel__heading {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.sort-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-hint);
+  white-space: nowrap;
+}
+
+/* Scrollable list container */
+.transaction-list {
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-right: var(--space-xs); /* room for scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.transaction-list::-webkit-scrollbar { width: 5px; }
+.transaction-list::-webkit-scrollbar-track { background: transparent; }
+.transaction-list::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 99px;
+}
+
+/* Individual transaction card */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-page);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition), background-color var(--transition),
+              box-shadow var(--transition);
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.transaction-item:hover { box-shadow: var(--shadow-sm); }
+
+/* Over-budget warning state */
+.transaction-item.is-over-budget {
+  border-color: var(--warning);
+  background-color: var(--warning-bg);
+}
+
+.transaction-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-item__name {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: 2px;
+}
+
+.transaction-item__amount {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.transaction-item__category {
+  font-size: var(--font-size-sm);
+  color: var(--text-hint);
+}
+
+/* ─── 10. CATEGORY BADGE & DOT ─── */
+.category-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.category-badge--food,
+.category-dot--food {
+  background-color: rgba(79, 110, 247, 0.12);
+  color: var(--color-food);
+}
+
+.category-badge--transport,
+.category-dot--transport {
+  background-color: rgba(247, 168, 79, 0.12);
+  color: var(--color-transport);
+}
+
+.category-badge--fun,
+.category-dot--fun {
+  background-color: rgba(79, 201, 126, 0.12);
+  color: var(--color-fun);
+}
+
+.category-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.category-dot--food      { background-color: var(--color-food); }
+.category-dot--transport { background-color: var(--color-transport); }
+.category-dot--fun       { background-color: var(--color-fun); }
+
+/* ─── 11. EMPTY STATE ─── */
+.empty-state {
+  text-align: center;
+  color: var(--text-hint);
+  font-size: var(--font-size-sm);
+  padding: var(--space-xl) var(--space-md);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  line-height: 1.6;
+}
+
+/* ─── 12. BALANCE PANEL ─── */
+.panel--balance {
+  text-align: center;
+}
+
+.balance-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  margin: var(--space-sm) 0 var(--space-lg);
+  line-height: 1.2;
+}
+
+/* Category summary list */
+.category-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  text-align: left;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-md);
+}
+
+.category-summary__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.category-summary__label {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.category-summary__amount {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Warning state on summary item */
+.category-summary__item.is-over-budget .category-summary__amount {
+  color: var(--warning);
+}
+
+/* ─── 13. CHART PANEL ─── */
+.panel--chart { padding-bottom: var(--space-lg); }
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+#spending-chart {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Chart empty state */
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-md);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.chart-empty__icon { font-size: 2.5rem; opacity: 0.4; }
+
+.chart-empty__text {
+  font-size: var(--font-size-sm);
+  color: var(--text-hint);
+  line-height: 1.6;
+}
+
+/* ─── 14. TOAST NOTIFICATION ─── */
+.toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--warning);
+  color: #fff;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+  max-width: 90vw;
+  text-align: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+}
+
+/* ─── 15. FOOTER ─── */
+.app-footer {
+  text-align: center;
+  padding: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-hint);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-lg);
+}
+
+/* ─── 16. RESPONSIVE — MOBILE (≤600px) ─── */
+@media (max-width: 600px) {
+
+  /* Single-column layout */
+  .grid-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tighter page padding */
+  .app-main {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .header-inner {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .app-title {
+    font-size: var(--font-size-base);
+  }
+
+  /* 44px minimum tap targets */
+  .btn,
+  .form-input,
+  .form-select {
+    min-height: 44px;
+  }
+
+  .btn--icon {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .btn--danger {
+    min-height: 36px; /* delete button inside list item */
+    min-width: 36px;
+  }
+
+  /* Larger balance on mobile */
+  .balance-amount {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Chart full width on mobile */
+  .chart-container {
+    max-width: 100%;
+  }
+
+  /* List header stacks on very small screens */
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Scrollable list slightly shorter on mobile */
+  .transaction-list {
+    max-height: 320px;
+  }
+}
+
+/* ─── 17. TABLET TWEAKS (601px – 900px) ─── */
+@media (min-width: 601px) and (max-width: 900px) {
+  .app-main {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .grid-row {
+    gap: var(--space-md);
+  }
+}
+
+/* ─── 18. FOCUS VISIBLE (keyboard nav) ─── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── 19. REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── 20. HIGH-SPEND HIGHLIGHT (transactions > $100,000) ─── */
+.transaction-item.is-high-spend {
+  border-color: #f7a84f;
+  background-color: rgba(247, 168, 79, 0.08);
+}
+
+body.dark .transaction-item.is-high-spend {
+  background-color: rgba(247, 168, 79, 0.12);
+}
+
+/* Warning badge inside transaction name */
+.warning-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-size: 0.85em;
+  vertical-align: middle;
+  cursor: default;
+}
+
+[hidden] {
+  display: none !important;
+}

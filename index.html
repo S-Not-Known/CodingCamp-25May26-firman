@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Track personal expenses, categorize spending, and visualize your budget with an interactive pie chart." />
+    <title>Expense &amp; Budget Visualizer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="light">
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+      <div class="header-inner">
+        <h1 class="app-title">
+          <span class="app-title__icon" aria-hidden="true">💰</span>
+          Expense &amp; Budget Visualizer
+        </h1>
+        <button
+          id="theme-toggle"
+          class="btn btn--icon"
+          type="button"
+          aria-label="Switch to dark mode"
+          title="Toggle dark / light mode"
+        >
+          <span class="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== TOAST NOTIFICATION ===== -->
+    <div
+      id="toast-error"
+      class="toast toast--hidden"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    ></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="app-main">
+
+      <!-- ─── ROW 1: Input Form (left) + Transaction List (right) ─── -->
+      <div class="grid-row grid-row--top">
+
+        <!-- LEFT COLUMN: Input Form + Budget Limits + Sort Control -->
+        <section class="panel" id="input-section" aria-labelledby="form-heading">
+          <h2 class="panel__heading" id="form-heading">Add Transaction</h2>
+
+          <!-- Transaction Input Form -->
+          <form id="transaction-form" class="transaction-form" novalidate>
+
+            <!-- Item Name -->
+            <div class="form-group">
+              <label class="form-label" for="item-name">Item Name</label>
+              <input
+                id="item-name"
+                class="form-input"
+                type="text"
+                name="item-name"
+                placeholder="e.g. Lunch, Bus ticket…"
+                maxlength="100"
+                autocomplete="off"
+                aria-required="true"
+                aria-describedby="error-name"
+              />
+              <span id="error-name" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+              <label class="form-label" for="item-amount">Amount (Rp)</label>
+              <input
+                id="item-amount"
+                class="form-input"
+                type="number"
+                name="item-amount"
+                placeholder="0.00"
+                min="0.01"
+                max="999999999.99"
+                step="0.01"
+                aria-required="true"
+                aria-describedby="error-amount"
+              />
+              <span id="error-amount" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+              <label class="form-label" for="item-category">Category</label>
+              <select
+                id="item-category"
+                class="form-select"
+                name="item-category"
+                aria-required="true"
+                aria-describedby="error-category"
+              >
+                <option value="">-- Select Category --</option>
+                <option value="Food">🍔 Food</option>
+                <option value="Transport">🚌 Transport</option>
+                <option value="Fun">🎉 Fun</option>
+              </select>
+              <span id="error-category" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn--primary btn--full" id="add-btn">
+              + Add Transaction
+            </button>
+
+          </form>
+
+          <!-- ─── Budget Limits ─── -->
+          <section class="budget-limits" id="budget-limits-section" aria-labelledby="budget-heading">
+            <h3 class="panel__subheading" id="budget-heading">Budget Limits</h3>
+            <p class="panel__hint">Set a spending limit per category to get warnings when you overspend.</p>
+
+            <!-- Food Limit -->
+            <div class="form-group">
+              <label class="form-label" for="limit-Food">
+                <span class="category-dot category-dot--food" aria-hidden="true"></span>
+                Food Limit (Rp)
+              </label>
+              <input
+                id="limit-Food"
+                class="form-input"
+                type="number"
+                name="limit-Food"
+                placeholder="No limit"
+                min="0.01"
+                max="999999999.99"
+                step="0.01"
+                aria-describedby="error-limit-Food"
+              />
+              <span id="error-limit-Food" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Transport Limit -->
+            <div class="form-group">
+              <label class="form-label" for="limit-Transport">
+                <span class="category-dot category-dot--transport" aria-hidden="true"></span>
+                Transport Limit (Rp)
+              </label>
+              <input
+                id="limit-Transport"
+                class="form-input"
+                type="number"
+                name="limit-Transport"
+                placeholder="No limit"
+                min="0.01"
+                max="999999999.99"
+                step="0.01"
+                aria-describedby="error-limit-Transport"
+              />
+              <span id="error-limit-Transport" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Fun Limit -->
+            <div class="form-group">
+              <label class="form-label" for="limit-Fun">
+                <span class="category-dot category-dot--fun" aria-hidden="true"></span>
+                Fun Limit (Rp)
+              </label>
+              <input
+                id="limit-Fun"
+                class="form-input"
+                type="number"
+                name="limit-Fun"
+                placeholder="No limit"
+                min="0.01"
+                max="999999999.99"
+                step="0.01"
+                aria-describedby="error-limit-Fun"
+              />
+              <span id="error-limit-Fun" class="error-msg" role="alert" aria-live="polite"></span>
+            </div>
+          </section>
+
+        </section><!-- /#input-section -->
+
+        <!-- RIGHT COLUMN: Transaction List + Sort Control -->
+        <section class="panel" id="list-section" aria-labelledby="list-heading">
+
+          <!-- List Header: title + sort control -->
+          <div class="list-header">
+            <h2 class="panel__heading" id="list-heading">Transactions</h2>
+
+            <!-- Sort Control -->
+            <div class="sort-control" id="sort-section">
+              <label class="sort-label" for="sort-control">Sort:</label>
+              <select
+                id="sort-control"
+                class="form-select form-select--compact"
+                aria-label="Sort transactions"
+              >
+                <option value="all">All Transactions</option>
+                <option value="amount-desc">Amount: Highest First</option>
+                <option value="amount-asc">Amount: Lowest First</option>
+                <option value="category-Food">Category: Food</option>
+                <option value="category-Transport">Category: Transport</option>
+                <option value="category-Fun">Category: Fun</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Scrollable Transaction List -->
+          <div
+            id="transaction-list"
+            class="transaction-list"
+            role="list"
+            aria-label="Transaction history"
+            aria-live="polite"
+          >
+            <!-- Transactions are injected here by app.js -->
+            <!-- Empty state placeholder (shown when list is empty) -->
+            <p class="empty-state" id="empty-state-msg">
+              No transactions yet. Add one above to get started!
+            </p>
+          </div>
+
+        </section><!-- /#list-section -->
+
+      </div><!-- /.grid-row--top -->
+
+      <!-- ─── ROW 2: Balance Display (left) + Pie Chart (right) ─── -->
+      <div class="grid-row grid-row--bottom">
+
+        <!-- Balance Display -->
+        <section class="panel panel--balance" id="balance-section" aria-labelledby="balance-heading">
+          <h2 class="panel__heading" id="balance-heading">Total Spent</h2>
+          <p
+            id="balance-display"
+            class="balance-amount"
+            aria-label="Total amount spent"
+            aria-live="polite"
+          >Rp 0</p>
+
+          <!-- Per-category spending summary -->
+          <ul class="category-summary" id="category-summary" aria-label="Spending by category">
+            <li class="category-summary__item" id="summary-Food">
+              <span class="category-dot category-dot--food" aria-hidden="true"></span>
+              <span class="category-summary__label">Food</span>
+              <span class="category-summary__amount" id="summary-amount-Food">$0.00</span>
+            </li>
+            <li class="category-summary__item" id="summary-Transport">
+              <span class="category-dot category-dot--transport" aria-hidden="true"></span>
+              <span class="category-summary__label">Transport</span>
+              <span class="category-summary__amount" id="summary-amount-Transport">$0.00</span>
+            </li>
+            <li class="category-summary__item" id="summary-Fun">
+              <span class="category-dot category-dot--fun" aria-hidden="true"></span>
+              <span class="category-summary__label">Fun</span>
+              <span class="category-summary__amount" id="summary-amount-Fun">$0.00</span>
+            </li>
+          </ul>
+        </section><!-- /#balance-section -->
+
+        <!-- Pie Chart -->
+        <section class="panel panel--chart" id="chart-section" aria-labelledby="chart-heading">
+          <h2 class="panel__heading" id="chart-heading">Spending by Category</h2>
+
+          <div class="chart-container" id="chart-container">
+            <canvas
+              id="spending-chart"
+              hidden
+              role="img"
+              aria-label="Pie chart showing spending distribution by category"
+            ></canvas>
+
+            <!-- Empty state shown when no transactions exist -->
+            <div class="chart-empty" id="chart-empty-msg" aria-live="polite">
+              <span class="chart-empty__icon" aria-hidden="true">📊</span>
+              <p class="chart-empty__text">No data available yet.<br />Add a transaction to see your spending chart.</p>
+            </div>
+          </div>
+        </section><!-- /#chart-section -->
+
+      </div><!-- /.grid-row--bottom -->
+
+    </main><!-- /.app-main -->
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="app-footer">
+      <p>Expense &amp; Budget Visualizer &mdash; data stored locally in your browser.</p>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <!-- Chart.js v4 from CDN (no SRI hash — version-pinned URL is sufficient) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <!-- App logic -->
+    <script src="app.js"></script>
+
+  </body>
+</html>
